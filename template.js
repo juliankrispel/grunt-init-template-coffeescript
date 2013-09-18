@@ -16,10 +16,16 @@ exports.description = 'Create a frontend project with coffeescript support, incl
 exports.notes = '';
 
 // Template-specific notes to be displayed after question prompts.
-exports.after = '' +
-  'the Getting Started guide:' +
-  '\n\n' +
-  'http://gruntjs.com/getting-started';
+exports.after = '\n\n' +
+  '**********************************************\n' +
+  '**       To install all depdendencies,      **\n' +
+  '**   watch and compile coffeescript files   **\n' +
+  '**   and serve this directory, statically,  **\n' + 
+  '**        run npm run-script build          **\n' +
+  '**********************************************\n' +
+  '**           Need help with grunt?          **\n' +
+  '**   http://gruntjs.com/getting-started     **\n' + 
+  '**********************************************';
 
 // Any existing file or directory matching this wildcard will cause a warning.
 exports.warnOn = '*';
@@ -39,9 +45,7 @@ exports.template = function(grunt, init, done) {
     init.prompt('author_name'),
     init.prompt('author_email'),
     init.prompt('author_url'),
-    init.prompt('node_version'),
-    init.prompt('main'),
-    init.prompt('npm_test', 'grunt nodeunit')
+    init.prompt('node_version')
   ], function(err, props) {
     props.keywords = [];
     props.devDependencies = {
@@ -54,10 +58,6 @@ exports.template = function(grunt, init, done) {
         "static-server": "*"
     };
 
-    props.scripts = {
-        "build": "npm install && bower install && grunt && static-server ."
-    };
-
     // Files to copy (and process).
     var files = init.filesToCopy(props);
 
@@ -68,7 +68,12 @@ exports.template = function(grunt, init, done) {
     init.copyAndProcess(files, props);
 
     // Generate package.json file.
-    init.writePackageJSON('package.json', props);
+    init.writePackageJSON('package.json', props, function(data){
+        data.scripts = {
+            "build": "npm install && bower install && grunt && static-server ."
+        };
+        return data;
+    });
 
     // All done!
     done();
