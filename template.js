@@ -55,7 +55,7 @@ exports.template = function(grunt, init, done) {
         "grunt-cli": "*",
         "grunt-contrib-coffee": "*",
         "grunt-contrib-watch": "*",
-        "static-server": "*"
+        "http-static": "*"
     };
 
     // Files to copy (and process).
@@ -70,7 +70,7 @@ exports.template = function(grunt, init, done) {
     // Generate package.json file.
     init.writePackageJSON('package.json', props, function(data){
         data.scripts = {
-            "build": "npm install && bower install && grunt && static-server ."
+            "build": "npm install && bower install && grunt && node_modules/.bin/simple-static"
         };
         return data;
     });
